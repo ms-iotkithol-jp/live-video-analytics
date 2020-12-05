@@ -15,6 +15,9 @@
             "iotCentralAppApiToken": "<IOT_CENTRAL_API_ACCESS_TOKEN>",
             "iotCentralDeviceProvisioningKey": "<IOT_CENTRAL_DEVICE_PROVISIONING_KEY>",
             "iotCentralScopeId": "<IOT_CENTRAL_SCOPE_ID>"
-        }
+        },
+        "detection": {
+            "iotCentralDetectArch": "<yolo3|openvino>"
+      }
     }
 }

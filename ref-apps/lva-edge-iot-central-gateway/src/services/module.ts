@@ -73,6 +73,10 @@ interface IIoTCentralAppKeys {
     iotCentralScopeId: string;
 }
 
+interface IIoTCentralDetectKeys {
+    iotCentralDetectArch: string;
+}
+
 interface ISystemProperties {
     cpuModel: string;
     cpuCores: number;
@@ -225,6 +229,10 @@ export class ModuleService {
         iotCentralScopeId: ''
     };
 
+    private iotCentralDetectKeys: IIoTCentralDetectKeys = {
+        iotCentralDetectArch: ''
+    };
+
     private moduleClient: ModuleClient = null;
     private moduleTwin: Twin = null;
     private deferredStart = defer();
@@ -254,6 +262,10 @@ export class ModuleService {
 
     public getInstanceId(): string {
         return this.iotcGatewayInstanceId;
+    }
+
+    public getDetectArch(): string {
+        return this.iotCentralDetectKeys.iotCentralDetectArch;
     }
 
     public getSampleImageUrls(): ISampleImageUrls {
@@ -504,6 +516,19 @@ export class ModuleService {
         return result;
     }
 
+    private async getIoTCentralDetection(): Promise<IIoTCentralDetectKeys> {
+        let result;
+
+        try {
+            result = await this.storage.get('state', 'iotCentral.detection');
+        }
+        catch (ex) {
+            this.server.log(['ModuleService', 'error'], `Error reading detection: ${ex.message}`);
+        }
+
+        return result;
+    }
+
     private async connectModuleClient(): Promise<boolean> {
         let result = true;
         let connectionStatus = `IoT Central successfully connected module: ${this.iotcGatewayModuleId}, instance id: ${this.iotcGatewayInstanceId}`;
@@ -569,6 +594,7 @@ export class ModuleService {
         const systemProperties = await this.getSystemProperties();
         const moduleProperties = await this.getModuleProperties();
         this.iotCentralAppKeys = await this.getIoTCentralAppKeys();
+        this.iotCentralDetectKeys = await this.getIoTCentralDetection();
 
         await this.updateModuleProperties({
             ...moduleProperties,
@@ -817,7 +843,7 @@ export class ModuleService {
     }
 
     private async createAndProvisionAmsInferenceDevice(cameraInfo: ICameraDeviceProvisionInfo): Promise<IProvisionResult> {
-        this.server.log(['ModuleService', 'info'], `Provisioning device - id: ${cameraInfo.cameraId}`);
+        this.server.log(['ModuleService', 'info'], `Provisioning device - id: ${cameraInfo.cameraId}, detect arch: ${this.getDetectArch()}`);
 
         const deviceProvisionResult: IProvisionResult = {
             dpsProvisionStatus: false,
@@ -829,7 +855,7 @@ export class ModuleService {
         };
 
         try {
-            const amsGraph = await AmsGraph.createAmsGraph(this, this.moduleDeploymentProperties.amsAccountName, cameraInfo);
+            const amsGraph = await AmsGraph.createAmsGraph(this, this.moduleDeploymentProperties.amsAccountName, cameraInfo, this.getDetectArch());
             this.server.log(['ModuleService', 'info'], `Create AmsGraph succeeded: ${this.moduleDeploymentProperties.amsAccountName}`);
 
             const deviceKey = this.computeDeviceKey(cameraInfo.cameraId, this.iotCentralAppKeys.iotCentralDeviceProvisioningKey);

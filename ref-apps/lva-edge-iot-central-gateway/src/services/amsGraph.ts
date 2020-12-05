@@ -10,7 +10,7 @@ import * as moment from 'moment';
 const contentRootDirectory = process.env.CONTENT_ROOT || '/data/content';
 
 export class AmsGraph {
-    public static async createAmsGraph(lvaGatewayModule: ModuleService, amsAccountName: string, cameraInfo: ICameraDeviceProvisionInfo): Promise<AmsGraph> {
+    public static async createAmsGraph(lvaGatewayModule: ModuleService, amsAccountName: string, cameraInfo: ICameraDeviceProvisionInfo, detectArch: string): Promise<AmsGraph> {
         try {
             const graphInstancePath = pathResolve(contentRootDirectory, `${cameraInfo.detectionType}GraphInstance.json`);
             const graphInstance = fse.readJSONSync(graphInstancePath);
@@ -19,7 +19,7 @@ export class AmsGraph {
 
             // lvaGatewayModule.logger(['AmsGraph', 'info'], `### graphData: ${JSON.stringify(graphInstance, null, 4)}`);
 
-            const graphTopologyPath = pathResolve(contentRootDirectory, `${cameraInfo.detectionType}GraphTopology.json`);
+            const graphTopologyPath = pathResolve(contentRootDirectory, `${cameraInfo.detectionType}GraphTopology.${detectArch}.json`);
             const graphTopology = fse.readJSONSync(graphTopologyPath);
 
             // lvaGatewayModule.logger(['AmsGraph', 'info'], `### graphData: ${JSON.stringify(graphTopology, null, 4)}`);
