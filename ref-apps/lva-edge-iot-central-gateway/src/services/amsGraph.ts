@@ -1,5 +1,6 @@
 import {
     ICameraDeviceProvisionInfo,
+    ILvaEdgeKeys,
     ModuleService
 } from './module';
 import { Message as IoTMessage } from 'azure-iot-device';
@@ -10,7 +11,7 @@ import * as moment from 'moment';
 const contentRootDirectory = process.env.CONTENT_ROOT || '/data/content';
 
 export class AmsGraph {
-    public static async createAmsGraph(lvaGatewayModule: ModuleService, amsAccountName: string, cameraInfo: ICameraDeviceProvisionInfo, detectArch: string): Promise<AmsGraph> {
+    public static async createAmsGraph(lvaGatewayModule: ModuleService, amsAccountName: string, cameraInfo: ICameraDeviceProvisionInfo, lvaEdgeKeys: ILvaEdgeKeys): Promise<AmsGraph> {
         try {
             const graphInstancePath = pathResolve(contentRootDirectory, `${cameraInfo.detectionType}GraphInstance.json`);
             const graphInstance = fse.readJSONSync(graphInstancePath);
@@ -19,10 +20,12 @@ export class AmsGraph {
 
             // lvaGatewayModule.logger(['AmsGraph', 'info'], `### graphData: ${JSON.stringify(graphInstance, null, 4)}`);
 
-            const graphTopologyPath = pathResolve(contentRootDirectory, `${cameraInfo.detectionType}GraphTopology.${detectArch}.json`);
-            const graphTopology = fse.readJSONSync(graphTopologyPath);
+            const graphTopologyPath = pathResolve(contentRootDirectory, `${cameraInfo.detectionType}GraphTopology.json`);
+            const graphTopologyJson = fse.readFileSync(graphTopologyPath).replace('$LvaEdge_Inferencing_Url', lvaEdgeKeys.lvaEdgeInferencingUrl);
 
-            // lvaGatewayModule.logger(['AmsGraph', 'info'], `### graphData: ${JSON.stringify(graphTopology, null, 4)}`);
+            const graphTopology = JSON.parse(graphTopologyJson);
+
+            lvaGatewayModule.logger(['AmsGraph', 'info'], `### graphData: ${JSON.stringify(graphTopology, null, 4)}, detectArch: ${lvaEdgeKeys.lvaEdgeDetectArch}`);
 
             const amsGraph = new AmsGraph(lvaGatewayModule, amsAccountName, cameraInfo, graphInstance, graphTopology);
 

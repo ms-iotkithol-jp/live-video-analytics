@@ -73,8 +73,9 @@ interface IIoTCentralAppKeys {
     iotCentralScopeId: string;
 }
 
-interface IIoTCentralDetectKeys {
-    iotCentralDetectArch: string;
+export interface ILvaEdgeKeys {
+    lvaEdgeDetectArch: string;
+    lvaEdgeInferencingUrl: string;
 }
 
 interface ISystemProperties {
@@ -229,8 +230,9 @@ export class ModuleService {
         iotCentralScopeId: ''
     };
 
-    private iotCentralDetectKeys: IIoTCentralDetectKeys = {
-        iotCentralDetectArch: ''
+    private lvaEdgeKeys: ILvaEdgeKeys = {
+        lvaEdgeDetectArch: '',
+        lvaEdgeInferencingUrl: ''
     };
 
     private moduleClient: ModuleClient = null;
@@ -262,10 +264,6 @@ export class ModuleService {
 
     public getInstanceId(): string {
         return this.iotcGatewayInstanceId;
-    }
-
-    public getDetectArch(): string {
-        return this.iotCentralDetectKeys.iotCentralDetectArch;
     }
 
     public getSampleImageUrls(): ISampleImageUrls {
@@ -516,14 +514,14 @@ export class ModuleService {
         return result;
     }
 
-    private async getIoTCentralDetection(): Promise<IIoTCentralDetectKeys> {
+    private async getlvaEdgeKeys(): Promise<ILvaEdgeKeys> {
         let result;
 
         try {
-            result = await this.storage.get('state', 'iotCentral.detection');
+            result = await this.storage.get('state', 'lvaEdgeKeys');
         }
         catch (ex) {
-            this.server.log(['ModuleService', 'error'], `Error reading detection: ${ex.message}`);
+            this.server.log(['ModuleService', 'error'], `Error reading lvaEdgeKeys: ${ex.message}`);
         }
 
         return result;
@@ -594,7 +592,7 @@ export class ModuleService {
         const systemProperties = await this.getSystemProperties();
         const moduleProperties = await this.getModuleProperties();
         this.iotCentralAppKeys = await this.getIoTCentralAppKeys();
-        this.iotCentralDetectKeys = await this.getIoTCentralDetection();
+        this.lvaEdgeKeys = await this.getlvaEdgeKeys();
 
         await this.updateModuleProperties({
             ...moduleProperties,
@@ -843,7 +841,7 @@ export class ModuleService {
     }
 
     private async createAndProvisionAmsInferenceDevice(cameraInfo: ICameraDeviceProvisionInfo): Promise<IProvisionResult> {
-        this.server.log(['ModuleService', 'info'], `Provisioning device - id: ${cameraInfo.cameraId}, detect arch: ${this.getDetectArch()}`);
+        this.server.log(['ModuleService', 'info'], `Provisioning device - id: ${cameraInfo.cameraId}, detect arch: ${(await this.getlvaEdgeKeys()).lvaEdgeDetectArch}`);
 
         const deviceProvisionResult: IProvisionResult = {
             dpsProvisionStatus: false,
@@ -855,7 +853,7 @@ export class ModuleService {
         };
 
         try {
-            const amsGraph = await AmsGraph.createAmsGraph(this, this.moduleDeploymentProperties.amsAccountName, cameraInfo, this.getDetectArch());
+            const amsGraph = await AmsGraph.createAmsGraph(this, this.moduleDeploymentProperties.amsAccountName, cameraInfo, this.lvaEdgeKeys);
             this.server.log(['ModuleService', 'info'], `Create AmsGraph succeeded: ${this.moduleDeploymentProperties.amsAccountName}`);
 
             const deviceKey = this.computeDeviceKey(cameraInfo.cameraId, this.iotCentralAppKeys.iotCentralDeviceProvisioningKey);

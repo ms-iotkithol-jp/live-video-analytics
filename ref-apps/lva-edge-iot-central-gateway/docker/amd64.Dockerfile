@@ -11,8 +11,8 @@ ADD ./setup/motionGraphInstance.json ${DATADIR}/motionGraphInstance.json
 ADD ./setup/motionGraphTopology.json ${DATADIR}/motionGraphTopology.json
 ADD ./setup/objectGraphInstance.json ${DATADIR}/objectGraphInstance.json
 ADD ./setup/objectGraphTopology.json ${DATADIR}/objectGraphTopology.json
-ADD ./setup/objectGraphTopology.yolo3.json ${DATADIR}/objectGraphTopology.yolo3.json
-ADD ./setup/objectGraphTopology.openvino.json ${DATADIR}/objectGraphTopology.openvino.json
+# ADD ./setup/objectGraphTopology.yolo3.json ${DATADIR}/objectGraphTopology.yolo3.json
+# ADD ./setup/objectGraphTopology.openvino.json ${DATADIR}/objectGraphTopology.openvino.json
 
 ENV WORKINGDIR /app
 WORKDIR ${WORKINGDIR}

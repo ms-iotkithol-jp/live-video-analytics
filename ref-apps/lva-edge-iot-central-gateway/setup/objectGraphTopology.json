@@ -27,12 +27,12 @@
                 "description": "name of the AMS CVR asset",
                 "default": "objectDetectorAsset"
             },
-            {
-                "name": "inferencingUrl",
-                "type": "String",
-                "description": "inferencing Url",
-                "default": "http://lvaYolov3/score"
-            },
+          {
+            "name": "inferencingUrl",
+            "type": "String",
+            "description": "inferencing Url",
+            "default": "$LvaEdge_Inferencing_Url"
+          },
             {
                 "name": "inferencingUserName",
                 "type": "String",
