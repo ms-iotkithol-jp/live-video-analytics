@@ -21,9 +21,9 @@ export class AmsGraph {
             // lvaGatewayModule.logger(['AmsGraph', 'info'], `### graphData: ${JSON.stringify(graphInstance, null, 4)}`);
 
             const graphTopologyPath = pathResolve(contentRootDirectory, `${cameraInfo.detectionType}GraphTopology.json`);
-            const graphTopologyJson = fse.readFileSync(graphTopologyPath).replace('$LvaEdge_Inferencing_Url', lvaEdgeKeys.lvaEdgeInferencingUrl);
-
-            const graphTopology = JSON.parse(graphTopologyJson);
+            const graphTopology = fse.readJSONSync(graphTopologyPath);
+            const inferencingUrlNode = graphTopology.properties.parameters.find((v) => v.name === 'inferencingUrl');
+            inferencingUrlNode.default = lvaEdgeKeys.lvaEdgeInferencingUrl;
 
             lvaGatewayModule.logger(['AmsGraph', 'info'], `### graphData: ${JSON.stringify(graphTopology, null, 4)}, detectArch: ${lvaEdgeKeys.lvaEdgeDetectArch}`);
 

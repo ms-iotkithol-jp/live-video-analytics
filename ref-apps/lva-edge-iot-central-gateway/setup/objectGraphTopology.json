@@ -31,7 +31,7 @@
             "name": "inferencingUrl",
             "type": "String",
             "description": "inferencing Url",
-            "default": "$LvaEdge_Inferencing_Url"
+            "default": "${lvaEdgeInferencingUrl}"
           },
             {
                 "name": "inferencingUserName",

@@ -853,6 +853,7 @@ export class ModuleService {
         };
 
         try {
+            this.server.log(['ModuleService', 'info'], `Inference Arch: ${this.lvaEdgeKeys.lvaEdgeDetectArch}, Url: ${this.lvaEdgeKeys.lvaEdgeInferencingUrl}`);
             const amsGraph = await AmsGraph.createAmsGraph(this, this.moduleDeploymentProperties.amsAccountName, cameraInfo, this.lvaEdgeKeys);
             this.server.log(['ModuleService', 'info'], `Create AmsGraph succeeded: ${this.moduleDeploymentProperties.amsAccountName}`);
 

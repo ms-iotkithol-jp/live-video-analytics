@@ -3,23 +3,22 @@
         "systemName": "<FOR_CUSTOMER_USE>",
         "systemId": "<FOR_CUSTOMER_USE>"
     },
-    "iotCentral": {
-        "properties": {
-            "manufacturer": "<GATEWAY_HARDWARE>",
-            "model": "<GATEWAY_HARDWARE>",
-            "processorManufacturer": "<GATEWAY_HARDWARE>",
-            "totalStorage": 0
-        },
-        "appKeys": {
-            "iotCentralAppHost": "<IOT_CENTRAL_HOST>",
-            "iotCentralAppApiToken": "<IOT_CENTRAL_API_ACCESS_TOKEN>",
-            "iotCentralDeviceProvisioningKey": "<IOT_CENTRAL_DEVICE_PROVISIONING_KEY>",
-            "iotCentralScopeId": "<IOT_CENTRAL_SCOPE_ID>"
-        }
-      }
+  "iotCentral": {
+    "properties": {
+      "manufacturer": "<GATEWAY_HARDWARE>",
+      "model": "<GATEWAY_HARDWARE>",
+      "processorManufacturer": "<GATEWAY_HARDWARE>",
+      "totalStorage": 0
     },
-    "lvaEdgeKeys": {
-      "detectArch": "<yolov3|opevino>",
-      "inferencingUri" :  "<INFERENCING URI for detctArch>"
+    "appKeys": {
+      "iotCentralAppHost": "<IOT_CENTRAL_HOST>",
+      "iotCentralAppApiToken": "<IOT_CENTRAL_API_ACCESS_TOKEN>",
+      "iotCentralDeviceProvisioningKey": "<IOT_CENTRAL_DEVICE_PROVISIONING_KEY>",
+      "iotCentralScopeId": "<IOT_CENTRAL_SCOPE_ID>"
     }
+  },
+  "lvaEdgeKeys": {
+    "lvaEdgeDetectArch": "<yolov3|opevino>",
+    "lvaEdgeInferencingUrl": "<INFERENCING URI for detctArch>"
+  }
 }
