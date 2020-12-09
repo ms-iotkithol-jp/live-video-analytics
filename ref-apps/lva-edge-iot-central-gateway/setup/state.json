@@ -19,6 +19,6 @@
   },
   "lvaEdgeKeys": {
     "lvaEdgeDetectArch": "<yolov3|opevino>",
-    "lvaEdgeInferencingUrl": "<INFERENCING URI for detctArch>"
+    "lvaEdgeInferencingUrl": "<INFERENCING URI for detctArch: http://lvaYolov3/score | http://open_vino:4000/vehicleDetection>"
   }
 }
